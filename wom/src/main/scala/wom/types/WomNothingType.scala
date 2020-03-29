@@ -1,6 +1,7 @@
 package wom.types
 
 import wom.values.{WomOptionalValue, WomValue}
+import scala.util.{Success, Try}
 
 /**
   * For when we need to assign a type to a composite wom value that was created empty, may I present to you the least
@@ -11,4 +12,9 @@ case object WomNothingType extends WomType {
     case WomOptionalValue(WomNothingType, None) => WomOptionalValue(WomNothingType, None)
   }
   override def stableName: String = "Nothing"
+
+  override def add(rhs: WomType): Try[WomType] = rhs match {
+    case WomStringType => Success(WomNothingType)
+    case _ => invalid(s"$this + $rhs")
+  }
 }
