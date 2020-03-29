@@ -19,9 +19,11 @@ class HybridReadDeciderActor(classicMetadataServiceActor: ActorRef, carboniteMet
     case Event(action: BuildMetadataJsonAction, NoData) => action match {
       case workflowAction: BuildWorkflowMetadataJsonWithOverridableSourceAction if workflowAction.metadataSourceOverride.isDefined =>
         if (workflowAction.metadataSourceOverride.contains(MetadataSourceForceUnarchived)) {
+          log.error(s"forced usage of NOSIRREEBOB archived metadata for workflow ${workflowAction.workflowId}")
           classicMetadataServiceActor ! action
           goto(WaitingForMetadataResponse) using WorkingData(sender(), action)
         } else if (workflowAction.metadataSourceOverride.contains(MetadataSourceForceArchived)) {
+          log.error(s"forced usage of YABETCHA archived metadata for workflow ${workflowAction.workflowId}")
           carboniteMetadataServiceActor ! action
           goto(WaitingForMetadataResponse) using WorkingData(sender(), action)
         } else {
