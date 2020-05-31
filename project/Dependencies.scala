@@ -45,7 +45,7 @@ object Dependencies {
   private val guavaV = "27.0.1-jre"
   private val heterodonV = "1.0.0-beta3"
   private val hsqldbV = "2.4.1"
-  private val http4sVersion = "0.20.0-M5"
+  private val http4sVersion = "0.20.10"
   private val jacksonV = "2.10.0"
   private val jacksonJqV = "1.0.0-preview.20190925"
   private val janinoV = "3.0.12"
@@ -136,7 +136,7 @@ object Dependencies {
 
   private val http4sDependencies = List(
     "org.http4s" %% "http4s-dsl" % http4sVersion,
-    "org.http4s" %% "http4s-blaze-client" % http4sVersion,
+    "org.http4s" %% "http4s-async-http-client" % http4sVersion,
     "org.http4s" %% "http4s-circe" % http4sVersion
   )
 
