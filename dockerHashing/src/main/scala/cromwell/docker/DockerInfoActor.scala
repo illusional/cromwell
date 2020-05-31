@@ -22,7 +22,7 @@ import cromwell.util.GracefulShutdownHelper.ShutdownCommand
 import fs2.Pipe
 import fs2.concurrent.{NoneTerminatedQueue, Queue}
 import net.ceedubs.ficus.Ficus._
-import org.http4s.client.blaze.BlazeClientBuilder
+import org.http4s.client.asynchttpclient.AsyncHttpClient
 import org.http4s.client.middleware.{Retry, RetryPolicy}
 import org.slf4j.LoggerFactory
 
@@ -139,7 +139,9 @@ final class DockerInfoActor(
      * Wraps the client in a retry based on the defined retry policy
      * Takes the form of a stream so it can be integrated with the actual stream of requests.
      */
-    val clientStream = BlazeClientBuilder[IO](registry.config.executionContext).stream.map(Retry[IO](retryPolicy))
+
+    val clientStream = AsyncHttpClient.resource[IO]().stream.map(Retry[IO](retryPolicy))
+//    val clientStream = BlazeClientBuilder[IO](registry.config.executionContext).stream.map(Retry[IO](retryPolicy))
 
     Queue.boundedNoneTerminated[IO, DockerInfoContext](queueBufferSize) map { queue =>
       val source = queue.dequeue
